@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Scatter Plot Visualization</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background: #f4f4f4;
+            color: #333;
+        }
+        h1 {
+            background: #007BFF;
+            color: white;
+            padding: 15px 0;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        fieldset {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+        legend {
+            padding: 0 15px;
+            font-weight: bold;
+            color: #007BFF;
+        }
+        label {
+            margin-right: 20px;
+        }
+        input[type="radio"] {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Interactive Scatter Plot</h1>
+    <div class="container">
+        <!-- Create a div where the graph will take place -->
+        <div id="dataviz"></div>
+
+        <fieldset>
+            <legend>X axis</legend>
+            <!-- X-axis options -->
+            <label><input type="radio" name="X_axis" value="sepal length" checked>Sepal Length</label>
+            <label><input type="radio" name="X_axis" value="sepal width">Sepal Width</label>
+            <label><input type="radio" name="X_axis" value="petal length">Petal Length</label>
+            <label><input type="radio" name="X_axis" value="petal width">Petal Width</label>
+        </fieldset>
+
+        <fieldset>
+            <legend>Y axis</legend>
+            <!-- Y-axis options -->
+            <label><input type="radio" name="Y_axis" value="sepal length">Sepal Length</label>
+            <label><input type="radio" name="Y_axis" value="sepal width" checked>Sepal Width</label>
+            <label><input type="radio" name="Y_axis" value="petal length">Petal Length</label>
+            <label><input type="radio" name="Y_axis" value="petal width">Petal Width</label>
+        </fieldset>
+    </div>
+    <!-- Load d3.js -->
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="./312540013.js"></script> <!-- Corrected JavaScript file name -->
+</body>
+</html>
