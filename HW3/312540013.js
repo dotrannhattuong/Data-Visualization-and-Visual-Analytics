@@ -4,7 +4,7 @@ const margin = { top: 20, right: 20, bottom: 20, left: 20 },
     height = 600 - margin.top - margin.bottom;
 
 // Path to data file
-const dataPath = "./abalone.data";
+const dataPath = "http://vis.lab.djosix.com:2024/data/abalone.data";
 
 // Load data
 d3.text(dataPath).then(function (data) {
