@@ -1,199 +1,164 @@
+// Set up margins and dimensions for the plot
+var plotMargins = { top: 30, right: 100, bottom: 10, left: 60 },
+    plotWidth = 950 - plotMargins.left - plotMargins.right,
+    plotHeight = 400 - plotMargins.top - plotMargins.bottom;
 
-// Set the dimensions and margins of the graph
-var margin = { top: 30, right: 100, bottom: 10, left: 60 },
-    width = 950 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
-
-// Append the SVG object to the #dataviz container
-var svg = d3.select("#dataviz")
+// Append SVG container for the visualization
+var svgContainer = d3.select("#dataviz")
     .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr("width", plotWidth + plotMargins.left + plotMargins.right)
+    .attr("height", plotHeight + plotMargins.top + plotMargins.bottom)
     .append("g")
-    .attr("transform",
-        "translate(" + margin.left + "," + margin.top + ")")
+    .attr("transform", "translate(" + plotMargins.left + "," + plotMargins.top + ")");
 
-// Load the data from CSV
-const data_path = "./iris.csv"
-d3.csv(data_path, function (data) {
-    data.splice(150, 1);
+// Load data from CSV
+const dataUrl = "http://vis.lab.djosix.com:2024/data/iris.csv";
+d3.csv(dataUrl, function (data) {
+    data.splice(150, 1);  // Remove erroneous data point
+
     // Define color scale for species
-    var color = d3.scaleOrdinal()
+    var colorScale = d3.scaleOrdinal()
         .domain(["Iris-setosa", "Iris-versicolor", "Iris-virginica"])
-        .range(["#00ffff", "#ff00ff", "#ffaa00"]); // New bright colors: pink, cyan, lime green
+        .range(["#00ffff", "#ff00ff", "#ffaa00"]); // Bright colors for each species
 
+    // Define the dimensions (attributes) to visualize
+    var attributes = ["sepal length", "sepal width", "petal length", "petal width"];
 
-    // Define dimensions for the axes
-    dimensions = ["sepal length", "sepal width", "petal length", "petal width"]
+    // Create a Y-axis scale for each attribute
+    var yScales = {};
+    attributes.forEach(attr => {
+        let minVal = d3.min(data, d => +d[attr]);
+        let maxVal = d3.max(data, d => +d[attr]);
+        yScales[attr] = d3.scaleLinear()
+            .domain([Math.floor(minVal), Math.ceil(maxVal)])  // Adjust axis range
+            .range([plotHeight, 0]);
+    });
 
-    // Create a linear scale for each dimension
-    var y = {}
-    for (d in dimensions) {
-        // console.log(dimensions[d])
-        // Find the max and min of each dimension
-        let d_max = 0
-        let d_min = 100
-        for(let i = 0; i < data.length; i++) {
-            if(data[i][dimensions[d]] > d_max) {
-                d_max = data[i][dimensions[d]]
-            }
-            if(data[i][dimensions[d]] < d_min) {
-                d_min = data[i][dimensions[d]]
-            }
-        }
-        // console.log(Math.floor(d_min), Math.ceil(d_max))
-        name = dimensions[d]
-        y[name] = d3.scaleLinear()
-            .domain([Math.floor(d_min), Math.ceil(d_max)]) // --> Same axis range for each group
-            // --> different axis range for each group --> .domain( [d3.extent(data, function(d) { return +d[name]; })] )
-            .range([height, 0])
-    }
+    // Create the X-axis scale for positioning each attribute
+    var xScale = d3.scalePoint()
+        .range([0, plotWidth])
+        .domain(attributes);
 
-    // Create the X scale
-    var x = {}
-    tmpx = d3.scalePoint()
-        .range([0, width])
-        .domain(dimensions);
-    for (i in dimensions) {
-        name = dimensions[i];
-        x[name] = tmpx(name);
-    }
-    // Highlight the specie that is hovered
-    var highlight = function (d) {
-
-        selected_specie = d.class
-
-        // first every group turns grey
+    // Function to highlight the hovered species
+    function highlightSpecies(d) {
+        let selectedSpecies = d.class;
         d3.selectAll(".line")
             .transition().duration(200)
             .style("stroke", "lightgrey")
-            .style("opacity", "0.2")
-        // Second the hovered specie takes its color
-        d3.selectAll("." + selected_specie)
+            .style("opacity", 0.2);
+
+        d3.selectAll("." + selectedSpecies)
             .transition().duration(200)
-            .style("stroke", color(selected_specie))
-            .style("opacity", "0.5")
+            .style("stroke", colorScale(selectedSpecies))
+            .style("opacity", 0.5);
     }
 
-    // Unhighlight
-    var doNotHighlight = function (d) {
+    // Function to reset the highlight
+    function resetHighlight() {
         d3.selectAll(".line")
             .transition().duration(200).delay(1000)
-            .style("stroke", function (d) { return (color(d.class)) })
-            .style("opacity", "0.5")
+            .style("stroke", d => colorScale(d.class))
+            .style("opacity", 0.5);
     }
 
-    // The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
-    function path(d) {
-        return d3.line()(dimensions.map(function (p) { return [x[p], y[p](d[p])]; }));
+    // Function to generate the path for each data row
+    function generatePath(d) {
+        return d3.line()(attributes.map(attr => [xScale(attr), yScales[attr](d[attr])]));
     }
-    var dragg = [];
-    var ID = [];
-    // Draw the lines
 
-    var tmp1 = svg.selectAll("myPath")
+    // Append the data lines to the chart
+    var dataLines = svgContainer.selectAll(".dataLine")
         .data(data)
         .enter()
         .append("path")
-        .attr("class", function (d) { return "line " + d.class }) // 2 class for each line: 'line' and the group name
-        .attr("d", path)
+        .attr("class", d => "line " + d.class)
+        .attr("d", generatePath)
         .style("fill", "none")
         .style("opacity", 0.5)
-        .style("stroke", function (d) { return (color(d.class)) })
+        .style("stroke", d => colorScale(d.class))
         .attr("stroke-width", 1.5)
-        .on("mouseover", highlight)
-        .on("mouseleave", doNotHighlight);
+        .on("mouseover", highlightSpecies)
+        .on("mouseleave", resetHighlight);
 
-    //console.log(tmp1._groups[0][0])
-    // Draw the axis:
-    var tmp = svg.selectAll("myAxis")
-        // For each dimension of the dataset I add a 'g' element:
-        .data(dimensions).enter()
+    // Create the axes for each attribute
+    var dragHandles = [], attrIndexMap = [];
+    var axisGroup = svgContainer.selectAll(".axisGroup")
+        .data(attributes)
+        .enter()
         .append("g")
         .attr("class", "axis")
-        // I translate this element to its right position on the x axis
-        .attr("transform", function (d) { return "translate(" + x[d] + ")"; })
+        .attr("transform", d => "translate(" + xScale(d) + ")")
+        .each(function (d, i) {
+            let axis = d3.axisLeft().ticks(5).scale(yScales[d]);
+            dragHandles[i] = d3.select(this).call(axis);
+            attrIndexMap[i] = i;
 
-        // And I build the axis with the call function
-        .each(function (d, index) {
-            dragg[index] = d3.select(this).call(d3.axisLeft().ticks(5).scale(y[d]));
-            ID[index] = index;
-            dragg[index].call(d3.drag()
-                .on("start", function (d) { })
+            // Enable dragging for axes
+            dragHandles[i].call(d3.drag()
                 .on("drag", function (d) {
-                    //console.log(1)
-                    x[d] = Math.min(Math.max(d3.event.x, 0), 800);
-                    dragg[index].attr("transform", function (d) { return "translate(" + x[d] + ")"; })
-                    for (var i = 0; i < 4; i++) {
-                        for (var j = i + 1; j < 4; j++) {
-                            if (x[dimensions[i]] >= x[dimensions[j]]) {
-                                if (d == dimensions[i]) {
-                                    x[dimensions[j]] = 800 / 3 * i;
-                                    dragg[ID[j]].attr("transform", function (d) { return "translate(" + x[dimensions[j]] + ")"; })
-                                }
-                                if (d == dimensions[j]) {
-                                    x[dimensions[i]] = 800 / 3 * j;
-                                    dragg[ID[i]].attr("transform", function (d) { return "translate(" + x[dimensions[i]] + ")"; })
-                                }
-                                swaptmp = dimensions[i];
-                                dimensions[i] = dimensions[j];
-                                dimensions[j] = swaptmp;
-                                swaptmp = ID[i];
-                                ID[i] = ID[j];
-                                ID[j] = swaptmp;
+                    let currentX = Math.min(Math.max(d3.event.x, 0), 800);
+                    xScale[d] = currentX;
+                    dragHandles[i].attr("transform", "translate(" + currentX + ")");
+
+                    // Rearrange attributes based on drag position
+                    for (var j = 0; j < attributes.length; j++) {
+                        for (var k = j + 1; k < attributes.length; k++) {
+                            if (xScale[attributes[j]] >= xScale[attributes[k]]) {
+                                let tempAttr = attributes[j], tempIndex = attrIndexMap[j];
+                                attributes[j] = attributes[k];
+                                attrIndexMap[j] = attrIndexMap[k];
+                                attributes[k] = tempAttr;
+                                attrIndexMap[k] = tempIndex;
                                 break;
                             }
                         }
                     }
-                    tmp1.attr("d", path)
-                })
-                .on("end", function (d) { }))
+
+                    dataLines.attr("d", generatePath);
+                }));
         });
 
-    // Add axis title with zoom effect
-    tmp.append("text")
+    // Add axis labels with hover zoom effect
+    axisGroup.append("text")
         .style("text-anchor", "middle")
         .attr("y", -9)
-        .text(function(d) { return d; })
+        .text(d => d)
         .style("fill", "black")
-        .style("font-size", "12px")  // Initial font size
-        .on("mouseover", function() {
+        .style("font-size", "12px")
+        .on("mouseover", function () {
             d3.select(this)
-            .transition()
-            .duration(200)
-            .style("font-size", "20px")  // Increase font size on hover
-            .style("fill", "red");   // Change color on hover (optional)
+                .transition().duration(200)
+                .style("font-size", "20px")
+                .style("fill", "red");
         })
-        .on("mouseout", function() {
+        .on("mouseout", function () {
             d3.select(this)
-            .transition()
-            .duration(200)
-            .style("font-size", "12px")  // Revert back to original size
-            .style("fill", "black");     // Revert color (optional)
+                .transition().duration(200)
+                .style("font-size", "12px")
+                .style("fill", "black");
         });
 
-
-    // Add legend with color boxes and black text:
+    // Create a legend for the species
     var legendData = [
-        {name: "setosa", color: "#00ffff"},
-        {name: "versicolor", color: "#ff00ff"},
-        {name: "virginica", color: "#ffaa00"}
+        { name: "setosa", color: "#00ffff" },
+        { name: "versicolor", color: "#ff00ff" },
+        { name: "virginica", color: "#ffaa00" }
     ];
 
-    // Append a legend for each class
-    legendData.forEach(function (d, i) {
-        svg.append("rect")
-            .attr("x", width + 10)
-            .attr("y", height - 60 + i * 20) // Adjust spacing between boxes
+    // Add legend items (color boxes and labels)
+    legendData.forEach((d, i) => {
+        svgContainer.append("rect")
+            .attr("x", plotWidth + 10)
+            .attr("y", plotHeight - 60 + i * 20)
             .attr("width", 15)
             .attr("height", 15)
             .style("fill", d.color);
 
-        svg.append("text")
-            .attr("x", width + 30)
-            .attr("y", height - 47 + i * 20) // Align with the boxes
+        svgContainer.append("text")
+            .attr("x", plotWidth + 30)
+            .attr("y", plotHeight - 47 + i * 20)
             .text(d.name)
-            .style("fill", "black")  // Class names in black
+            .style("fill", "black")
             .attr("alignment-baseline", "middle");
     });
-})
+});

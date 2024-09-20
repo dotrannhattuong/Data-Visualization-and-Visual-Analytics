@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parallel Coordinate Plots Visualization</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <style>
@@ -11,46 +12,43 @@
             background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
             color: #333;
             margin: 0;
-            padding: 0;
+            padding: 20px 0;
             transition: background-color 0.5s ease;
         }
-        /* h1 {
-            color: #5a5a5a;
-            margin: 20px 0;
-            transition: color 0.5s ease;
-        } */
+        h1 {
+            font-size: 2em;
+            color: #444;
+            margin-bottom: 20px;
+        }
         #dataviz {
-            margin: 0 auto; /* Center horizontally */
+            margin: 0 auto;
             border: 1px solid #ddd;
             border-radius: 8px;
-            width: 960px; /* Keep the width as needed */
-            height: 450px; /* Set a specific height */
+            width: 960px;
+            height: 450px;
             background-color: #fff;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
-            display: flex; /* Use flexbox to center the content */
-            justify-content: center; /* Center the content horizontally */
-            align-items: center; /* Center the content vertically */
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        /* p {
-            color: #555;
-            transition: color 0.5s ease;
+        p {
+            color: #666;
+            font-size: 1em;
         }
         p:hover {
-            color: #ff6347;
-        } */
-        /* hr {
-            border-color: #ddd;
-            transition: border-color 0.5s ease;
-        } */
+            color: #000;
+            transition: color 0.3s ease;
+        }
     </style>
 </head>
-
 <body>
     <h1>Parallel Coordinate Plots</h1>
     <div id="dataviz"></div>
-    <p>You can drag the axis by placing your cursor over the axis label.</p>
-    <!-- <hr> -->
+    <p>Drag the axis labels to rearrange the dimensions.</p>
+    
+    <!-- Load D3.js library -->
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="312540013.js"></script> <!-- Your script file -->
 </body>
-<script src="https://d3js.org/d3.v4.js"></script>
-<script src="312540013.js"></script>
 </html>

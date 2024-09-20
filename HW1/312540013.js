@@ -1,5 +1,5 @@
 // Load and prepare data
-d3.csv("./iris.csv", function (data) {
+d3.csv("http://vis.lab.djosix.com:2024/data/iris.csv", function (data) {
     // Adjust data by removing the last entry
     data = data.slice(0, -1);
 

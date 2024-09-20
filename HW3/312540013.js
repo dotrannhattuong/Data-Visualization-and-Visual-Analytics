@@ -1,206 +1,173 @@
-// Graph dimension
+// Set graph dimensions and margins
 const margin = { top: 20, right: 20, bottom: 20, left: 20 },
     width = 600 - margin.left - margin.right,
-    height = 600 - margin.top - margin.bottom
+    height = 600 - margin.top - margin.bottom;
 
-const data_path = "./abalone.data"
+// Path to data file
+const dataPath = "./abalone.data";
 
-d3.text(data_path).then(function (data) {
-    // console.log("data", data)
-    
-    var features = ["Length", "Diameter", "Height", "Whole weight", "Shucked weight", "Viscera weight", "Shell weight", "Rings"]
-    var data_M = [];
-    var data_F = [];
-    var data_I = [];
-    
-    var rows = data.split("\n");
-    for (var i = 0; i < rows.length; i++) {
-        var cols = rows[i].split(",");
+// Load data
+d3.text(dataPath).then(function (data) {
+    const features = ["Length", "Diameter", "Height", "Whole weight", "Shucked weight", "Viscera weight", "Shell weight", "Rings"];
+    let dataMale = [], dataFemale = [], dataInfant = [];
 
-        var list = [];
-        for (var j = 0; j < 8; j++) {
-            list.push(+cols[j + 1])
-        }
+    // Split data into rows
+    const rows = data.split("\n");
 
-        if (cols[0] == "M") {
-            data_M.push(list);
-        }
-        if (cols[0] == "F") {
-            data_F.push(list);
-        }
-        if (cols[0] == "I") {
-            data_I.push(list);
-        }
-    }
+    // Parse each row and separate by gender
+    rows.forEach(row => {
+        const cols = row.split(",");
+        const featureList = cols.slice(1, 9).map(Number);
 
-    // console.log("data_M", data_M)
-    // console.log("data_F", data_F)
-    // console.log("data_I", data_I)
-
-    cm_M = correlation_matrix(data_M)
-    cm_F = correlation_matrix(data_F)
-    cm_I = correlation_matrix(data_I)
-
-    render_legend()
-    render_cm(cm_M)
-
-    document.getElementById('sex-select').addEventListener('change', function() {
-        switch (this.value) {
-            case "male": render_cm(cm_M); break;
-            case "female": render_cm(cm_F); break;
-            case "infant": render_cm(cm_I); break;
+        switch (cols[0]) {
+            case "M":
+                dataMale.push(featureList);
+                break;
+            case "F":
+                dataFemale.push(featureList);
+                break;
+            case "I":
+                dataInfant.push(featureList);
+                break;
         }
     });
-    
-    function correlation_matrix(data) {
-        const matrix = math.transpose(data);
-        // let cm = math.zeros(matrix.length, matrix.length);
-        let cm = []
 
-        for (let i = 0; i < matrix.length; i++) {
-            for (let j = 0; j < matrix.length; j++) {
-                let corr = math.corr(matrix[i], matrix[j]);
-                // cm.set([i, j], corr);
-                cm.push({
+    // Generate correlation matrices
+    const cmMale = calculateCorrelationMatrix(dataMale);
+    const cmFemale = calculateCorrelationMatrix(dataFemale);
+    const cmInfant = calculateCorrelationMatrix(dataInfant);
+
+    // Render the legend and initial correlation matrix (for males)
+    renderLegend();
+    renderCorrelationMatrix(cmMale);
+
+    // Add event listener to change matrix based on selected gender
+    document.getElementById('sex-select').addEventListener('change', function () {
+        switch (this.value) {
+            case "male":
+                renderCorrelationMatrix(cmMale);
+                break;
+            case "female":
+                renderCorrelationMatrix(cmFemale);
+                break;
+            case "infant":
+                renderCorrelationMatrix(cmInfant);
+                break;
+        }
+    });
+
+    // Function to calculate the correlation matrix
+    function calculateCorrelationMatrix(data) {
+        const transposedData = math.transpose(data);
+        let correlationMatrix = [];
+
+        transposedData.forEach((colX, i) => {
+            transposedData.forEach((colY, j) => {
+                const corrValue = math.corr(colX, colY);
+                correlationMatrix.push({
                     x: features[i],
                     y: features[j],
-                    value: +corr
+                    value: +corrValue
                 });
+            });
+        });
 
-            }
-        }
-        // console.log("cm", cm)
-
-        return cm
+        return correlationMatrix;
     }
 
-    function render_legend() {
-        // legend scale
-        var legend_top = 15;
-        var legend_height = 15;
+    // Render the legend
+    function renderLegend() {
+        const legendTop = 15;
+        const legendHeight = 15;
 
-        var legend_svg = d3.selectAll(".legend").append("svg")
+        const legendSvg = d3.select(".legend").append("svg")
             .attr("width", width + margin.left + margin.right)
-            .attr("height", legend_height + legend_top + 20)
+            .attr("height", legendHeight + legendTop + 20)
             .append("g")
-            .attr("transform", "translate(" + margin.left + ", " + legend_top + ")");
+            .attr("transform", `translate(${margin.left}, ${legendTop})`);
 
-        var defs = legend_svg.append("defs");
+        const defs = legendSvg.append("defs");
 
-        var gradient = defs.append("linearGradient")
+        const gradient = defs.append("linearGradient")
             .attr("id", "linear-gradient");
 
-        var stops = [{ offset: 0, color: "#00429d", value: -1 }, { offset: .5, color: "#ffffe0", value: 0 }, {
-            offset: 1, color: "#ff0000", value: 1 }];
+        const stops = [
+            { offset: 0, color: "#00429d", value: -1 },
+            { offset: 0.5, color: "#ffffe0", value: 0 },
+            { offset: 1, color: "#ff0000", value: 1 }
+        ];
 
         gradient.selectAll("stop")
             .data(stops)
             .enter().append("stop")
-            .attr("offset", function (d) { return (100 * d.offset) + "%"; })
-            .attr("stop-color", function (d) { return d.color; });
+            .attr("offset", d => `${100 * d.offset}%`)
+            .attr("stop-color", d => d.color);
 
-        legend_svg.append("rect")
+        legendSvg.append("rect")
             .attr("width", width)
-            .attr("height", legend_height)
+            .attr("height", legendHeight)
             .style("fill", "url(#linear-gradient)");
 
-        legend_svg.selectAll("text")
+        legendSvg.selectAll("text")
             .data(stops)
             .enter().append("text")
-            .attr("x", function (d) { return width * d.offset; })
+            .attr("x", d => width * d.offset)
             .attr("dy", -3)
-            .style("text-anchor", function (d, i) { return i == 0 ? "start" : i == 1 ? "middle" : "end"; })
-            .text(function (d, i) { return d.value.toFixed(2); })
-            .style("font-size", 12)
+            .style("text-anchor", (d, i) => (i === 0 ? "start" : i === 1 ? "middle" : "end"))
+            .text(d => d.value.toFixed(2))
+            .style("font-size", 12);
     }
 
-    function render_cm(cm) {
-        // clean svg
-        d3.select("#cm").select('svg').remove()
+    // Render the correlation matrix
+    function renderCorrelationMatrix(correlationMatrix) {
+        // Clean previous matrix
+        d3.select("#cm").select('svg').remove();
 
-        // List of all variables and number of them
-        const domain = Array.from(new Set(cm.map(function (d) { return d.x })))
-        const num = Math.sqrt(cm.length)
+        // Get unique variables for axes
+        const variables = Array.from(new Set(correlationMatrix.map(d => d.x)));
+        const numVars = Math.sqrt(correlationMatrix.length);
 
-        // Create a color scale
-        const color = d3.scaleLinear()
+        // Define scales for color and size
+        const colorScale = d3.scaleLinear()
             .domain([-1, 0, 1])
             .range(["#00429d", "#ffffe0", "#ff0000"]);
 
-        // Create a size scale for bubbles on top right. Watch out: must be a rootscale!
-        const size = d3.scaleSqrt()
+        const sizeScale = d3.scaleSqrt()
             .domain([0, 1])
             .range([0, 12]);
 
-        // X scale
-        const x = d3.scalePoint()
-            .range([0, width])
-            .domain(domain)
+        // Create X and Y scales
+        const xScale = d3.scalePoint().range([0, width]).domain(variables);
+        const yScale = d3.scalePoint().range([0, height]).domain(variables);
 
-        // Y scale
-        const y = d3.scalePoint()
-            .range([0, height])
-            .domain(domain)
-        
-        // Create the svg area
-        const svg = d3.select("#cm")
-            .append("svg")
+        // Create SVG container for the matrix
+        const svg = d3.select("#cm").append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        // Create one 'g' element for each cell of the correlogram
-        const cor = svg.selectAll(".cor")
-            .data(cm)
+        // Create one group element per correlation cell
+        const correlationGroups = svg.selectAll(".cor")
+            .data(correlationMatrix)
             .join("g")
             .attr("class", "cor")
-            .attr("transform", function (d) {
-                return `translate(${x(d.x)}, ${y(d.y)})`
-            });
+            .attr("transform", d => `translate(${xScale(d.x)}, ${yScale(d.y)})`);
 
-        // Low left part + Diagonal: Add the text with specific color
-        cor.filter(function (d) {
-            const ypos = domain.indexOf(d.y);
-            const xpos = domain.indexOf(d.x);
-            return xpos <= ypos;
-        })
+        // Add text for lower diagonal and diagonal (with color)
+        correlationGroups.filter(d => variables.indexOf(d.x) <= variables.indexOf(d.y))
             .append("text")
             .attr("y", 5)
-            .text(function (d) {
-                if (d.x === d.y) {
-                    return d.x;
-                } else {
-                    return d.value.toFixed(2);
-                }
-            })
+            .text(d => (d.x === d.y ? d.x : d.value.toFixed(2)))
             .style("font-size", 12)
-            // .style("text-align", "center")
             .attr("text-anchor", "middle")
-            .style("fill", function (d) {
-                if (d.x === d.y) {
-                    return "#000";
-                } else {
-                    return color(d.value);
-                }
-            });
+            .style("fill", d => (d.x === d.y ? "#000" : colorScale(d.value)));
 
-
-        // Up right part: add circles
-        cor.filter(function (d) {
-            const ypos = domain.indexOf(d.y);
-            const xpos = domain.indexOf(d.x);
-            return xpos > ypos;
-        })
+        // Add circles for upper diagonal
+        correlationGroups.filter(d => variables.indexOf(d.x) > variables.indexOf(d.y))
             .append("circle")
-            .attr("r", function (d) { return size(Math.abs(d.value)) })
-            .style("fill", function (d) {
-                if (d.x === d.y) {
-                    return "#000";
-                } else {
-                    return color(d.value);
-                }
-            })
-            .style("opacity", 0.8)
+            .attr("r", d => sizeScale(Math.abs(d.value)))
+            .style("fill", d => colorScale(d.value))
+            .style("opacity", 0.8);
     }
-})
+});
