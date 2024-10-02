@@ -1,0 +1,75 @@
+/* General styles for SVG elements */
+svg {
+    font: 12px sans-serif;  /* Set font size and family */
+    font-weight: bold;      /* Make font bold */
+    margin: 10px;           /* Set margin for SVG container */
+}
+
+/* Axis and frame styles */
+.axis,
+.plot-frame {  /* Changed 'frame' to 'plot-frame' for clarity */
+    shape-rendering: crispEdges;  /* Ensures sharp edges for axis and frame lines */
+}
+
+.axis line {
+    stroke: #ddd;  /* Light gray color for axis lines */
+}
+
+.axis path {
+    display: none;  /* Hide the axis path */
+}
+
+/* Text styling within each cell */
+.cell text {
+    font-weight: bold;  /* Make text bold */
+    text-transform: capitalize;  /* Capitalize text labels */
+    fill: black;  /* Set text color to black */
+}
+
+/* Plot frame border styles */
+.plot-frame {  /* Updated from 'frame' to 'plot-frame' */
+    fill: none;  /* No fill inside the frame */
+    stroke: #aaa;  /* Light gray stroke for the plot frame */
+}
+
+/* Circle styles for scatter plot points */
+circle {
+    fill-opacity: 0.5;  /* Set the opacity of circles to half-transparent */
+}
+
+/* Style for hidden circles */
+circle.hidden {
+    fill: #ccc !important;  /* Set hidden circles to light gray */
+}
+
+/* Brush selection area styling */
+.extent {
+    fill: #000;  /* Black fill for the brush extent */
+    fill-opacity: 0.125;  /* Slight transparency */
+    stroke: #fff;  /* White stroke around the extent area */
+}
+
+/* Tooltip styles */
+.tooltip {
+    position: absolute;  /* Position tooltip absolutely in the document */
+    text-align: left;  /* Align text to the left */
+    width: auto;  /* Automatically adjust width */
+    height: auto;  /* Automatically adjust height */
+    padding: 8px;  /* Add padding inside tooltip */
+    font: 12px sans-serif;  /* Set font style for tooltip text */
+    background: rgba(255, 255, 255, 0.9);  /* Light background with transparency */
+    border: 1px solid #ccc;  /* Light gray border */
+    border-radius: 4px;  /* Rounded corners for the tooltip */
+    pointer-events: none;  /* Make tooltip ignore pointer events */
+    color: #333;  /* Set text color to dark gray */
+}
+
+/* Body background and typography */
+body {
+    background: linear-gradient(135deg, #f8f9fa, #e0f7fa);  /* Apply a gradient background */
+    font-family: 'Roboto', sans-serif;  /* Use Roboto font for the entire page */
+    color: #333333;  /* Default text color is dark gray */
+    margin: 0;  /* Remove default margin */
+    padding: 0;  /* Remove default padding */
+    text-align: center;  /* Center text by default */
+}
