@@ -1,0 +1,101 @@
+/* General layout improvements */
+body {
+    font-family: 'Lato', sans-serif;
+    background: linear-gradient(135deg, #ffffff, #ece9e6); /* Subtle gradient background */
+    color: #333333; /* Dark text for readability */
+    text-align: center;
+    padding: 20px;
+    margin: 0;
+}
+
+.container {
+    width: 80%; /* Central container width */
+    margin: 0 auto; /* Centering the container */
+    padding: 30px; /* Padding for inner content */
+    background-color: #ffffff; /* White background for the container */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+    border-radius: 15px; /* Rounded corners */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
+
+h1 {
+    font-size: 36px; /* Large font size for the main title */
+    font-weight: bold; /* Bold text for emphasis */
+    color: #2c3e50; /* Dark blue color for the title */
+    margin-bottom: 40px; /* Space below the title */
+}
+
+.controls {
+    display: inline-block; /* Align controls inline */
+    background-color: #f8f9fa; /* Light gray background for control area */
+    padding: 20px; /* Padding around the controls */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    margin-bottom: 40px; /* Spacing below the control area */
+}
+
+label {
+    font-size: 18px; /* Font size for form labels */
+    font-weight: bold; /* Bold labels */
+    margin-right: 10px; /* Space between label and input */
+}
+
+select, button {
+    margin: 15px; /* Space around the buttons and select inputs */
+    padding: 12px 18px; /* Padding inside the buttons and select inputs */
+    border-radius: 10px; /* Rounded corners */
+    font-size: 18px; /* Font size for button and select text */
+    border: 1px solid #ccc; /* Light gray border */
+    transition: all 0.3s ease; /* Smooth transition on hover */
+}
+
+button {
+    background-color: #3498db; /* Blue background for buttons */
+    color: white; /* White text on buttons */
+    cursor: pointer; /* Pointer cursor for buttons */
+    border: none; /* No border on buttons */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Button shadow */
+}
+
+button:hover {
+    background-color: #2980b9; /* Darker blue on hover */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15); /* Deeper shadow on hover */
+}
+
+select:hover, select:focus {
+    border-color: #3498db; /* Blue border on hover or focus */
+}
+
+#chart_area {
+    margin-top: 50px; /* Space above the visualization */
+}
+
+hr {
+    margin-top: 50px; /* Space above the horizontal line */
+    border: none; /* No default border */
+    height: 1px; /* Height of the horizontal line */
+    background-color: #ccc; /* Light gray line */
+}
+
+.tooltip {
+    font-size: 16px; /* Tooltip text size */
+    padding: 12px; /* Padding inside the tooltip */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2); /* Slight shadow for tooltip */
+    background-color: white; /* White background for tooltip */
+    color: #333; /* Dark text color */
+    border-radius: 8px; /* Rounded corners for tooltip */
+}
+
+.legend {
+    font-size: 16px; /* Font size for the legend */
+    font-weight: bold; /* Bold text for legend items */
+}
+
+text.chart-title {
+    font-size: 26px; /* Font size for the chart title */
+    font-weight: bold; /* Bold text for the title */
+}
+
+text.chart-label {
+    font-size: 18px; /* Font size for the chart labels */
+}

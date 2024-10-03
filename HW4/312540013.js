@@ -1,4 +1,4 @@
-const csvFilePath = "./iris.csv";  // Renamed to clarify that this is the CSV file path
+const csvFilePath = "http://vis.lab.djosix.com:2024/data/iris.csv";  // Renamed to clarify that this is the CSV file path
 
 // Set dimensions for each cell in the scatter plot matrix
 var plotSize = 200;  // Renamed for clarity

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Rankings Bar Charts</title> <!-- Updated title -->
+    <link rel="stylesheet" href="312540013.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>University Rankings Bar Charts</h1> <!-- Updated title -->
+
+        <div class="controls">
+            <!-- Sort by -->
+            <label for="sort-by">Sort by: </label>
+            <select name="sort-by" id="sort-by">
+                <option value="scores_overall" selected>Overall</option>
+                <option value="scores_teaching">Teaching</option>
+                <option value="scores_research">Research</option>
+                <option value="scores_citations">Citations</option>
+                <option value="scores_industry_income">Industry income</option>
+                <option value="scores_international_outlook">International outlook</option>
+            </select>
+
+            <!-- Sort order -->
+            <label for="sort-order">Sort order: </label>
+            <select name="sort-order" id="sort-order">
+                <option value="descending" selected>Descending</option>
+                <option value="ascending">Ascending</option>
+            </select>
+            <button id="sort-button">Sort</button>
+        </div>
+
+        <!-- Div for the graph -->
+        <div id="chart_area"></div> <!-- Updated ID for clarity -->
+
+        <hr>
+    </div>
+</body>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="312540013.js"></script>
+
+</html>
