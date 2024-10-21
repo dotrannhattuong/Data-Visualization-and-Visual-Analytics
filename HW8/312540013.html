@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Ensures proper display on mobile devices -->
+    <title>Sankey Diagram</title>
+
+    <!-- Include Bootstrap CSS for layout and styling -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    
+    <!-- Link to your custom CSS file -->
+    <link rel="stylesheet" href="312540013.css">
+    
+    <!-- Include Google Fonts for Roboto font family -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Main content container with Bootstrap padding and margin -->
+    <div class="container">
+        <!-- Main title of the page -->
+        <h1 class="myweb">Sankey Diagram</h1>
+        
+        <!-- Subtitle for the diagram -->
+        <h2 class="myweb">Car Evaluation</h2>
+        
+        <!-- Container for the Sankey diagram with Bootstrap auto margin and spacing -->
+        <div class="sankey-container mx-auto my-5">
+            <!-- SVG element where the Sankey diagram will be rendered -->
+            <svg id="sankey-diagram" width="1000" height="500"></svg>
+        </div>
+    </div>
+
+    <!-- Include D3.js for rendering the Sankey diagram -->
+    <script src="https://unpkg.com/d3@5.9.2/dist/d3.min.js"></script>
+    
+    <!-- Link to your custom JavaScript file -->
+    <script src="312540013.js"></script>
+</body>
+</html>

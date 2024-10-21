@@ -1,0 +1,92 @@
+/* General Styling for the entire body */
+body {
+    background: linear-gradient(to bottom right, #a8edea, #fed6e3); /* Cool blue to soft pink gradient */
+    font-family: 'Roboto', sans-serif; /* Use Roboto font */
+    color: #333; /* Default text color */
+    margin: 0;
+    padding: 0;
+    height: 1500px; /* Fixed height */
+}
+
+/* Centering h1 and h2 headings */
+h1, h2 {
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    align-items: center; /* Centers vertically */
+    text-align: center; /* Aligns text to the center */
+}
+
+/* h1 heading styling */
+h1 {
+    font-size: 2.5em; /* Large font size */
+    margin-top: 20px; /* Space from top */
+    color: #8e44ad;
+}
+
+/* h2 heading styling */
+h2 {
+    font-size: 1.5em; /* Slightly smaller font size */
+    color: #8e44ad; 
+    margin-bottom: 20px; /* Space at the bottom */
+}
+
+/* Anchor tag styling */
+a {
+    color: #8e44ad; 
+    text-decoration: none; /* No underline */
+    transition: color 0.3s ease; /* Smooth transition on hover */
+}
+
+/* Change color on hover for anchor tags */
+a:hover {
+    color: #ff6600; /* Orange color on hover */
+}
+
+/* Sankey Diagram Styling */
+#sankey-diagram {
+    background-color: #fff; /* White background */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Soft shadow effect */
+    margin: 0 auto; /* Centers the diagram */
+    display: block; /* Block element to handle margin */
+    height: 500px; /* Fixed height for diagram */
+}
+
+/* Sankey Diagram Node Styling */
+.node rect {
+    cursor: move; /* Changes cursor to move */
+    fill-opacity: 0.85; /* Slightly transparent */
+    shape-rendering: crispEdges; /* Sharp edges for rectangles */
+}
+
+/* Text inside Sankey nodes */
+.node text {
+    pointer-events: none; /* Disables pointer events on text */
+    fill: #000; /* Black color for text */
+    font-size: 14px; /* Text size */
+}
+
+/* Styling for Sankey links */
+.link {
+    fill: none; /* No fill */
+    stroke: #007bff; /* Blue stroke for links */
+    stroke-opacity: 0.2; /* Transparent stroke */
+    transition: stroke-opacity 0.3s ease; /* Smooth transition on hover */
+}
+
+/* Hover effect for Sankey links */
+.link:hover {
+    stroke-opacity: 0.6; /* Darker stroke on hover */
+}
+
+/* Hover effect for Sankey nodes */
+.node:hover rect {
+    fill-opacity: 1; /* Fully opaque when hovered */
+}
+
+/* Title Styling */
+#title {
+    font-size: 2.5em; /* Large font size */
+    text-align: center; /* Center text */
+    color: #007bff; /* Blue color for title */
+}

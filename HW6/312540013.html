@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThemeRiver Visualization</title>
+
+    <!-- External CSS and fonts -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="312540013.css">
+</head>
+
+<body class="container text-center">
+
+    <!-- Main heading -->
+    <h1 class="my-3">Theme River Visualization</h1>
+
+    <!-- Link to external dataset -->
+    <h2><a href="https://www.kaggle.com/datasets/htagholdings/property-sales/" target="_blank">
+        House Property Sales Time Series
+    </a></h2>
+
+    <!-- Main content area: visualization and draggable blocks -->
+    <div class="row my-3">
+        <!-- Graph container -->
+        <div id="my_dataviz" class="col-12 col-md-6"></div>
+
+        <!-- Draggable blocks for reordering keys -->
+        <div class="m-auto col-12 col-md-6">
+            <p>Drag the blocks to rearrange the keys.</p>
+            <div id="blocks" class="list-group col draggable"></div>
+        </div>
+    </div>
+
+    <hr>
+</body>
+
+<!-- External JS libraries and main script -->
+<script src="https://d3js.org/d3.v6.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.0/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<script src="312540013.js"></script>
+
+</html>
